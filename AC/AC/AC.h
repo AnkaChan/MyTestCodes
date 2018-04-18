@@ -1,8 +1,8 @@
 #ifndef _AC_H_
 #define _AC_H_
 
-#define REQUEST_INPUTS(N) \
-if (argc < N){\
+#define REQUIRE_INPUTS(N) \
+if (argc < N+1){\
 	printf("Need %d input files.\n", N);\
 	return -1;\
 }\
@@ -14,3 +14,6 @@ if (argc < N){\
 #endif
 
 #endif
+
+#define ForInt(IDX, RangeInital, RangeEnd) for (int IDX = RangeInital; IDX < RangeEnd; ++IDX)
+#define For0Int(IDX, RangeEnd) ForInt(IDX, 0 , RangeEnd)
