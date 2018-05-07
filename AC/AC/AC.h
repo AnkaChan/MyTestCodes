@@ -13,7 +13,7 @@ if (argc < N+1){\
 #define PRINT_NODE(a)
 #endif
 
-#endif
-
 #define ForInt(IDX, RangeInital, RangeEnd) for (int IDX = RangeInital; IDX < RangeEnd; ++IDX)
 #define For0Int(IDX, RangeEnd) ForInt(IDX, 0 , RangeEnd)
+
+#endif
