@@ -15,4 +15,4 @@ if (argc < N + 1){\
 
 #define ForInt(IDX, RangeBegin, RangeEnd) for(int IDX = RangeBegin; IDX < RangeEnd; ++IDX)
 #define For0Int(IDX, RangeEnd) ForInt(IDX, 0, RangeEnd)
-
+#endif
