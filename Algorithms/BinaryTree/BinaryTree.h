@@ -1,16 +1,78 @@
 #ifndef BINARY_TREE
 #define BINARY_TREE
 #include <functional>
+#include <iterator>
+#include <stack>
 
 struct TreeNode
 {
 	double val;
-	TreeNode * last = NULL;
-	TreeNode * next = NULL;
+	TreeNode * left = NULL;
+	TreeNode * right = NULL;
 };
+
 
 class CBinaryTree {
 public:
+	class CBinaryTreeIter : public std::iterator<std::forward_iterator_tag, TreeNode> {
+	public:
+		CBinaryTreeIter(CBinaryTree* tree, TreeNode * root) : mTree(tree), mRoot(root) {
+			TreeNode * current = root;
+			while (NULL != current)
+			{
+				traverseNodeStack.push(current);
+				current = current->left;
+			}
+			if (!traverseNodeStack.empty())
+			{
+				currentNode = traverseNodeStack.top();
+				traverseNodeStack.pop();
+			}
+			else
+			{
+				currentNode = NULL;
+			}
+		};
+		CBinaryTreeIter  operator++() {
+			if (traverseNodeStack.empty())
+			{
+				currentNode = NULL;
+				mRoot = NULL;
+				return *this;
+			}
+			currentNode = traverseNodeStack.top();
+			traverseNodeStack.pop();
+			TreeNode * current = currentNode->right;
+			while (NULL != current)
+			{
+				traverseNodeStack.push(current);
+				current = current->left;
+			}
+
+			return *this;
+		};
+
+		bool operator ==(const CBinaryTreeIter & iter1) {
+			return currentNode == iter1.currentNode;
+
+		}
+
+		bool operator !=(const CBinaryTreeIter & iter1) {
+			return currentNode != iter1.currentNode;
+		}
+
+		TreeNode & operator*() {
+			return *currentNode;
+		}
+
+	private:
+		CBinaryTree * mTree;
+		TreeNode * mRoot;
+		TreeNode * currentNode = NULL;
+		std::stack<TreeNode *> traverseNodeStack;
+	};
+
+
 	CBinaryTree() {
 		
 	}
@@ -48,12 +110,12 @@ public:
 			{
 				lastestAccessedNode = pNode;
 				rootNode = lastestAccessedNode;
-				lastestAccessedNode->last = NULL;
-				lastestAccessedNode->next = NULL;
+				lastestAccessedNode->left = NULL;
+				lastestAccessedNode->right = NULL;
 			}
 			else {
-				lastestAccessedNode->next = pNode;
-				pNode->last = lastestAccessedNode;
+				lastestAccessedNode->right = pNode;
+				pNode->left = lastestAccessedNode;
 				//pNode->next = NULL;
 				lastestAccessedNode = pNode;
 			}
@@ -66,81 +128,92 @@ public:
 		while (pCurrentNode != NULL)
 		{
 			printf("%f\n", pCurrentNode->val);
-			if (pCurrentNode->next == NULL)
+			if (pCurrentNode->right == NULL)
 			{
 				pLastNode = pCurrentNode;
 			}
-			pCurrentNode = pCurrentNode->next;
+			pCurrentNode = pCurrentNode->right;
 		}
 		printf("---------------------------------------------------\n");
 		pCurrentNode = pLastNode;
 		while (pCurrentNode != NULL)
 		{
 			printf("%f\n", pCurrentNode->val);
-			pCurrentNode = pCurrentNode->last;
+			pCurrentNode = pCurrentNode->left;
 		}
 	}
 
 	void invertTree() {
 		auto swapNode = [](TreeNode * pNode) mutable {
-			TreeNode * temp = pNode->last;
-			pNode->last = pNode->next;
-			pNode->next = temp;
+			TreeNode * temp = pNode->left;
+			pNode->left = pNode->right;
+			pNode->right = temp;
 		};
 		preOrderTraverse(swapNode);
 	}
+
+	CBinaryTreeIter begin() {
+		return CBinaryTreeIter(this, rootNode);
+	}
+
+	CBinaryTreeIter end() {
+		return CBinaryTreeIter(this, NULL);
+	}
+	
 private:
 	void insertOnNode(TreeNode * pNewNode, TreeNode * pTargetNode) {
 		if (pNewNode->val > pTargetNode->val)
 		{
-			if (pTargetNode->next == NULL) {
-				pTargetNode->next = pNewNode;
+			if (pTargetNode->right == NULL) {
+				pTargetNode->right = pNewNode;
 				return;
 			}
 			else
 			{
-				insertOnNode(pNewNode, pTargetNode->next);
+				insertOnNode(pNewNode, pTargetNode->right);
 			}
 		}
 		else
 		{
-			if (pTargetNode->last == NULL) {
-				pTargetNode->last = pNewNode;
+			if (pTargetNode->left == NULL) {
+				pTargetNode->left = pNewNode;
 				return;
 			}
 			else
 			{
-				insertOnNode(pNewNode, pTargetNode->last);
+				insertOnNode(pNewNode, pTargetNode->left);
 			}
 		}
 	}
 
 	void inOrderTraverseNode(TreeNode * pTargetNode, std::function<void(TreeNode *)> & func) {
-		if (pTargetNode->last != NULL)
+		if (pTargetNode->left != NULL)
 		{
-			inOrderTraverseNode(pTargetNode->last, func);
+			inOrderTraverseNode(pTargetNode->left, func);
 		}
 		func(pTargetNode);
-		if (pTargetNode->next != NULL)
+		if (pTargetNode->right != NULL)
 		{
-			inOrderTraverseNode(pTargetNode->next, func);
+			inOrderTraverseNode(pTargetNode->right, func);
 		}
 		return;
 	}
 
 	void preOrderTraverseNode(TreeNode * pTargetNode, std::function<void(TreeNode *)> & func) {
 		func(pTargetNode);
-		if (pTargetNode->last != NULL)
+		if (pTargetNode->left != NULL)
 		{
-			preOrderTraverseNode(pTargetNode->last, func);
+			preOrderTraverseNode(pTargetNode->left, func);
 		}
-		if (pTargetNode->next != NULL)
+		if (pTargetNode->right != NULL)
 		{
-			preOrderTraverseNode(pTargetNode->next, func);
+			preOrderTraverseNode(pTargetNode->right, func);
 		}
 		return;
 	}
 	TreeNode * rootNode = NULL;
 };
+
+
 
 #endif // BINARY_TREE

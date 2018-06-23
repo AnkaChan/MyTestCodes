@@ -32,6 +32,11 @@ int main(int argc, char** argv) {
 	/*tree.inOrderTraverse(ShowNode());
 	printf("---------------------------------------------------\n");
 	tree.changeToList();*/
-	tree.invertTree();
-	tree.inOrderTraverse(ShowNode());
+	//tree.invertTree();
+	//tree.inOrderTraverse(ShowNode());
+
+	for (TreeNode node : tree)
+	{
+		printf("%f\n", node.val);
+	}
 }
