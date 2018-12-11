@@ -103,6 +103,71 @@ public:
 	void preOrderTraverse(std::function<void(TreeNode *)>  func) {
 		preOrderTraverseNode(rootNode, func);
 	}
+
+	void preOrderTraverseNonrecursive(std::function<void(TreeNode *)>  func) {
+		std::stack<TreeNode *> traverseStack;
+		if (rootNode == NULL)
+		{
+			return;
+		}
+
+		TreeNode * currentPut = rootNode;
+
+		func(rootNode);
+		while (currentPut != NULL)
+		{
+			func(currentPut);
+			traverseStack.push(currentPut);
+			currentPut = currentPut->left;
+		}
+
+		while (!traverseStack.empty())
+		{
+			TreeNode * currentTraverse = traverseStack.top();
+			traverseStack.pop();
+			currentPut = currentTraverse->right;
+			while (currentPut != NULL)
+			{
+				func(currentPut);
+				traverseStack.push(currentPut);
+				currentPut = currentPut->left;
+			}
+
+		}
+
+	}
+
+	void inOrderTraverseNonrecursive(std::function<void(TreeNode *)>  func) {
+		std::stack<TreeNode *> traverseStack;
+		if (rootNode == NULL)
+		{
+			return;
+		}
+
+		TreeNode * currentPut = rootNode;
+
+		while (currentPut != NULL)
+		{
+			traverseStack.push(currentPut);
+			currentPut = currentPut->left;
+		}
+
+		while (!traverseStack.empty())
+		{
+			TreeNode * currentTraverse = traverseStack.top();
+			func(currentTraverse);
+			traverseStack.pop();
+			currentPut = currentTraverse->right;
+			while (currentPut != NULL)
+			{
+				traverseStack.push(currentPut);
+				currentPut = currentPut->left;
+			}
+			
+		}
+
+	}
+
 	void changeToList() {
 		auto changeNode = [this](TreeNode * pNode) mutable {
 			static TreeNode * lastestAccessedNode = NULL;

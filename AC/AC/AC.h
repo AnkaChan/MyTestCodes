@@ -1,5 +1,9 @@
 #ifndef _AC_H_
 #define _AC_H_
+#include "def.h"
+#include "IO_AC.h"
+#include "Str_AC.h"
+
 
 #define REQUIRE_INPUTS(N) \
 if (argc < N + 1){\

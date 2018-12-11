@@ -3,7 +3,7 @@
 #include <string>
 #include <ctime>
 #include <random>
-#include "BinaryTree.h"
+#include "BinaryTreeLongestPath.h"
 
 using std::cout;
 using std::endl;
@@ -13,10 +13,10 @@ class ShowNode {
 public:
 	void operator()(TreeNode * pNode) {
 		printf("%f\n", pNode -> val);
-		
-
 	}
 };
+
+
 
 int main(int argc, char** argv) {
 	std::default_random_engine generator(time(NULL));
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
 	CBinaryTree tree;
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		tree.insert(randReal(generator));
 	}
@@ -35,8 +35,17 @@ int main(int argc, char** argv) {
 	//tree.invertTree();
 	//tree.inOrderTraverse(ShowNode());
 
+	/*tree.inOrderTraverseNonrecursive(ShowNode());
+	printf("---------------------------------------------------\n");
+
 	for (TreeNode node : tree)
 	{
 		printf("%f\n", node.val);
-	}
+	}*/
+
+	tree.preOrderTraverse(ShowNode());
+	printf("---------------------------------------------------\n");
+	tree.preOrderTraverseNonrecursive(ShowNode());
+
+	printf("MaxLen:%d\n", tree.getMaxLen());
 }
