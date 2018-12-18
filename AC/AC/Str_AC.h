@@ -24,6 +24,25 @@ namespace AC {
 			if (num > str.size())
 				str.insert(0, num - str.size(), paddingChar);
 		}
+
+		static std::string replace(std::string & inStr, const std::string subStrToReplace, const std::string replacement, bool replaceAll = true) {
+			std::string outStr;
+			size_t index = 0;
+			outStr = inStr;
+			do {
+				/* Locate the substring to replace. */
+				index = outStr.find(subStrToReplace, index);
+				if (index == std::string::npos) break;
+
+				/* Make the replacement. */
+				outStr.replace(index, subStrToReplace.size(), replacement);
+
+				/* Advance index forward so the next iteration doesn't pick it up as well. */
+				index += 3;
+			} while (replaceAll);
+
+			return outStr;
+		};
 	};
 }
 #endif
