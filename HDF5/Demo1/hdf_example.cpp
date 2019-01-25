@@ -132,6 +132,22 @@ int main(void)
 
 		attribute.write(PredType::NATIVE_INT, attr_data);
 
+		uint8_t dataOut[10][imgHeight][imgWidth];
+
+		dataset.read(**dataOut, PredType::STD_U8LE);
+
+		for (int n = 0; n < 10; n++)
+		{
+			printf("--------------------------------------------------------------\n");
+			for (int i = 0; i < imgHeight; i++)
+			{
+				for (int j = 0; j < imgWidth; ++j) {
+					printf("%3d ",dataOut[n][i][j]); // n + i * iW + j;
+				}
+				printf("\n");
+
+			}
+		}
 
 	}  // end of try block
 
